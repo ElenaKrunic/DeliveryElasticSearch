@@ -1,6 +1,6 @@
 package elena.krunic.elastic.search.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -21,16 +21,16 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Seller extends User {
 
-	@Column(name = "operatesSince", nullable = false)
+	@Column(name = "operatesSince", nullable = true)
 	private Date operatesSince; 
 	
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = true)
 	private String email; 
 	
 	@Column(name = "address", nullable = false)
 	private String address; 
 	
-	@Column(name = "storeName", nullable = false)
+	@Column(name = "storeName", nullable = true)
 	private String storeName; 
 	
 	@OneToMany(mappedBy="seller")

@@ -17,5 +17,6 @@ public class BuyerDTO {
 	private String username;
 	private String password; 
 	private boolean blocked; 
+	private String email; 
 	private String address; 
 }

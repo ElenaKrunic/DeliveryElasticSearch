@@ -6,4 +6,6 @@ import elena.krunic.elastic.search.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+	User findByUsername(String username);
+
 }
