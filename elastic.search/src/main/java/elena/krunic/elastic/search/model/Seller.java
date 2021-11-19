@@ -30,8 +30,8 @@ public class Seller extends User {
 	@Column(name = "address", nullable = false)
 	private String address; 
 	
-	@Column(name = "name", nullable = false)
-	private String name; 
+	@Column(name = "storeName", nullable = false)
+	private String storeName; 
 	
 	@OneToMany(mappedBy="seller")
 	private List<Action> actions;
