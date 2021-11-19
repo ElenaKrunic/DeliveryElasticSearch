@@ -28,19 +28,19 @@ public class User implements Serializable {
 	@Column(name="id", nullable=false, unique=true)
 	private Long id; 
 	
-	@Column(name="firstname")
+	@Column(name="firstname", nullable = false)
 	private String firstname; 
 	
-	@Column(name="lastname")
+	@Column(name="lastname", nullable = false)
 	private String lastname; 
 	
-	@Column(name="username")
+	@Column(name="username", nullable = false)
 	private String username; 
 	
-	@Column(name="password")
+	@Column(name="password", nullable = false)
 	private String password; 
 	
-	@Column(name="blocked")
+	@Column(name="blocked", nullable = false)
 	private boolean blocked; 
 	
 	

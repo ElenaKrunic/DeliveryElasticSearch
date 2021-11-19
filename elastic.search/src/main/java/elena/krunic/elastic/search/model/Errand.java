@@ -16,36 +16,41 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+//porudzbina
 @Entity
-@Table(name="product")
+@Table(name="errand")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product {
-//produkt je artikal
-	
+public class Errand {
+
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
-
-    @Column(name = "name", nullable = false)
-	private String name; 
-    
-    @Column(name = "description", nullable = false)
-   	private String description;
-    
-    @Column(name = "price", nullable = false)
-   	private double price;
-    
-    @Column(name = "path", nullable = false)
-   	private String path; 
-    
-    @OneToMany(mappedBy="product")
-    private List<Item> items;
-
-    @ManyToOne
-    private Seller seller;
+	
+	@Column(name="orderedAtDate", nullable=false)
+	private Date orderedAtDate; 
+	
+	@Column(name="isDelivered", nullable=false)
+	private boolean isDelivered; 
+	
+	@Column(name="grade", nullable=false)
+	private int grade; 
+	
+	@Column(name="comment", nullable=false)
+	private String comment; 
+	
+	@Column(name="anonymousComment", nullable=false)
+	private boolean anonymousComment;
+	
+	@Column(name="archivedComment", nullable=false)
+	private boolean archivedComment; 
+	
+	@ManyToOne
+	private Buyer buyer;
+	
+	@OneToMany(mappedBy="errand")
+	private List<Item> items; 
 }
