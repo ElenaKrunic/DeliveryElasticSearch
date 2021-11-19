@@ -1,0 +1,21 @@
+Prodavac || Kupac || Administrator 
+
+1. Kao prodavac zelim da definisem listu artikala za svoje prodavnice 
+2. Kao prodavac zelim da definisem akcije za odredjenje artikle  
+3. Kao prodavac zelim da dodam artikl 
+4. Kao prodavac zelim da izmijenim artikl 
+5. Kao prodavac zelim da obrisem artikl 
+
+=================================================
+
+1. Kao kupac zelim da pregledam ponudjene artikle nekog prodavca 
+2. Kao kupac zelim da porucim artikal u odredjenoj kolicini 
+3. Kao kupac zelim da pregledam nedostavljene porudzbine i oznacim one koje su stigle [isto kao logicko brisanje] 
+4. Kao kupac zelim da ostavim recenziju na sve prispjele porudzbine ocjenom 1-5 
+
+=================================================
+
+1.Kao administrator imam mogucnost pregleda svih korisnika 
+2.Kao administrator imam mogucnost blokiranja pojedinacnih korisnika 
+
+ 
