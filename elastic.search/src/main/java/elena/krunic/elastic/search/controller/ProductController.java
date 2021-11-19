@@ -6,12 +6,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import elena.krunic.elastic.search.dto.ProductDTO;
@@ -19,12 +21,14 @@ import elena.krunic.elastic.search.model.Product;
 import elena.krunic.elastic.search.repository.ProductRepository;
 
 @RestController
+@RequestMapping(value="/api/products")
+@CrossOrigin
 public class ProductController {
 
 	@Autowired
 	private ProductRepository productRepository; 
 	
-	@GetMapping
+	@GetMapping(value="/all")
 	public ResponseEntity<List<ProductDTO>> getProducts(){
 		List<Product> products = productRepository.findAll(); 
 		List<ProductDTO> productsDTO = new ArrayList<>();
@@ -49,6 +53,7 @@ public class ProductController {
 	
 	@PostMapping(consumes="application/json", value="/saveProduct")
 	public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) {
+		
 		Product product = new Product(); 
 		
 		product.setDescription(productDTO.getDescription());
@@ -61,7 +66,7 @@ public class ProductController {
 		return new ResponseEntity<>(new ProductDTO(product), HttpStatus.CREATED); 
 	}
 	
-	@PutMapping(consumes="applicaiton/json", value="/{id}")
+	@PutMapping(value="/updateProduct/{id}")
 	public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO, @PathVariable("id") Long id) {
 		Product product = productRepository.getById(id); 
 		
@@ -80,7 +85,7 @@ public class ProductController {
 	}
 	
 	
-	@DeleteMapping(value="/{id}")
+	@DeleteMapping(value="/deleteProduct/{id}")
 	public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
 		Product product = productRepository.getById(id); 
 		
