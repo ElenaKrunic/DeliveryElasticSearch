@@ -1,5 +1,6 @@
 package elena.krunic.elastic.search.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import elena.krunic.elastic.search.dto.ProductDTO;
+import elena.krunic.elastic.search.dto.StringResponseDTO;
 import elena.krunic.elastic.search.model.Product;
 import elena.krunic.elastic.search.repository.ProductRepository;
+import elena.krunic.elastic.search.service.ProductService;
 
 @RestController
 @RequestMapping(value="/api/products")
@@ -27,6 +30,9 @@ public class ProductController {
 
 	@Autowired
 	private ProductRepository productRepository; 
+	
+	@Autowired 
+	private ProductService productService; 
 	
 	@GetMapping(value="/all")
 	public ResponseEntity<List<ProductDTO>> getProducts(){
@@ -95,5 +101,17 @@ public class ProductController {
 		}
 		
 		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+	}
+	
+	//buy product -> 
+
+	@PostMapping("/orderProduct")
+	public ResponseEntity<?> order(@RequestBody ProductDTO productDTO, Principal principal) {
+		try {
+			String message = productService.orderProduct(productDTO, "elenakrunic@gmail.com");
+			return new ResponseEntity<>(new StringResponseDTO(message), HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new StringResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
 	}
 }

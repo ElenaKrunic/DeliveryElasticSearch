@@ -6,4 +6,6 @@ import elena.krunic.elastic.search.model.Buyer;
 
 public interface BuyerRepository extends JpaRepository<Buyer, Long> {
 
+	Buyer findByAddress(String address);
+
 }

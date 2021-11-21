@@ -30,22 +30,22 @@ public class Errand {
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 	
-	@Column(name="orderedAtDate", nullable=false)
+	@Column(name="orderedAtDate", nullable=true)
 	private Date orderedAtDate; 
 	
-	@Column(name="isDelivered", nullable=false)
+	@Column(name="isDelivered", nullable=true)
 	private boolean isDelivered; 
 	
-	@Column(name="grade", nullable=false)
+	@Column(name="grade", nullable=true)
 	private int grade; 
 	
-	@Column(name="comment", nullable=false)
+	@Column(name="comment", nullable=true)
 	private String comment; 
 	
-	@Column(name="anonymousComment", nullable=false)
+	@Column(name="anonymousComment", nullable=true)
 	private boolean anonymousComment;
 	
-	@Column(name="archivedComment", nullable=false)
+	@Column(name="archivedComment", nullable=true)
 	private boolean archivedComment; 
 	
 	@ManyToOne
