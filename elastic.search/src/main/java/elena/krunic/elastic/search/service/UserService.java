@@ -2,6 +2,7 @@ package elena.krunic.elastic.search.service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import elena.krunic.elastic.search.dto.UserDTO;
 import elena.krunic.elastic.search.model.Buyer;
 import elena.krunic.elastic.search.model.Seller;
 import elena.krunic.elastic.search.model.User;
+import elena.krunic.elastic.search.repository.BuyerRepository;
+import elena.krunic.elastic.search.repository.SellerRepository;
 import elena.krunic.elastic.search.repository.UserRepository;
 
 @Service
@@ -19,6 +22,12 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository; 
+	
+	@Autowired 
+	private SellerRepository sellerRepository;
+	
+	@Autowired
+	private BuyerRepository buyerRepository; 
 
 	public String registerSeller(SellerDTO sellerDTO) throws Exception {
 		User user = userRepository.findByUsername(sellerDTO.getUsername()); 
@@ -73,6 +82,68 @@ public class UserService {
 		buyer = userRepository.save(buyer);  
 		
 		return "Buyer successfully registered!";
+	}
+
+	public String editSeller(SellerDTO sellerDTO, String name) throws Exception {
+		
+		Seller seller = sellerRepository.findByName(name); 
+		
+		if(seller == null ) {
+			throw new Exception("User does not exist!");
+		}
+		
+		seller.setAddress(sellerDTO.getAddress());
+		seller.setBlocked(sellerDTO.isBlocked());
+		seller.setEmail(sellerDTO.getEmail());
+		seller.setFirstname(sellerDTO.getFirstname());
+		seller.setLastname(sellerDTO.getLastname());
+		seller.setOperatesSince(sellerDTO.getOperatesSince());
+		
+		//hesuj lozinku! 
+
+		seller.setPassword(sellerDTO.getPassword());
+		seller.setStoreName(sellerDTO.getStoreName());
+		seller.setUsername(sellerDTO.getUsername());
+		
+		seller = sellerRepository.save(seller); 
+		
+		return "You successfully edited seller!";
+	}
+
+	public String editBuyer(BuyerDTO buyerDTO, String name) throws Exception {
+		
+		Buyer buyer = buyerRepository.findByName(name);
+		
+		if(buyer == null) {
+			throw new Exception("Buyer does not exist!"); 
+		}
+		
+		buyer.setAddress(buyerDTO.getAddress());
+		buyer.setBlocked(buyerDTO.isBlocked());
+		buyer.setFirstname(buyerDTO.getFirstname());
+		buyer.setLastname(buyerDTO.getLastname());
+		
+		// hesuj lozinku! 
+		
+		buyer.setPassword(buyerDTO.getPassword());
+		buyer.setUsername(buyerDTO.getUsername());
+		
+		buyer = buyerRepository.save(buyer); 
+		
+		return "Buyer successfully edited!";
+	}
+
+	public String blockUser(Long id) throws Exception {
+		Optional<User> userOptional = userRepository.findById(id); 
+		
+		if(!userOptional.isPresent()) {
+			throw new Exception("No user with id provided!"); 
+		}
+		
+		User user = userOptional.get(); 
+		user.setBlocked(true);
+		user = userRepository.save(user);
+		return "User is banned from system!";
 	}
 
 }

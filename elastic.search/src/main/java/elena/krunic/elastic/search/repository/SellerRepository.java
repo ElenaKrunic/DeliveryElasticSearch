@@ -6,4 +6,6 @@ import elena.krunic.elastic.search.model.Seller;
 
 public interface SellerRepository extends JpaRepository<Seller, Long>{
 
+	Seller findByName(String name);
+
 }
