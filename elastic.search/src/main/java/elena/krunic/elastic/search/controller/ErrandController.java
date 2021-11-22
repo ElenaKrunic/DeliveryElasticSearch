@@ -40,4 +40,15 @@ public class ErrandController {
 			return new ResponseEntity<>(new StringResponseDTO(e.getMessage()) ,HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PutMapping("/leaveComment/{id}")
+	public ResponseEntity<?> leaveComment(@RequestBody ProductDTO productDTO, @PathVariable("id") Long id) {
+		try {
+			String message = errandService.leaveComment(productDTO, id); 
+			return new ResponseEntity<>(new StringResponseDTO(message), HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new StringResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST); 
+		}
+	}
 }
