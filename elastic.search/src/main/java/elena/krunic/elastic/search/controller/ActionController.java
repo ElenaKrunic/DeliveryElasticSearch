@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import elena.krunic.elastic.search.dto.ActionDTO;
 import elena.krunic.elastic.search.model.Action;
+import elena.krunic.elastic.search.model.Seller;
 import elena.krunic.elastic.search.repository.ActionRepository;
+import elena.krunic.elastic.search.repository.UserRepository;
 import elena.krunic.elastic.search.service.ActionService;
 
 @RestController
@@ -30,6 +32,9 @@ public class ActionController {
 	
 	@Autowired
 	private ActionService actionService; 
+	
+	@Autowired 
+	private UserRepository userRepository; 
 	
 	@GetMapping
 	public ResponseEntity<List<ActionDTO>> getActions() {
@@ -57,10 +62,13 @@ public class ActionController {
 	@PostMapping(consumes="application/json", value="/saveAction")
 	public ResponseEntity<ActionDTO> saveAction(@RequestBody ActionDTO actionDTO) {
 		Action action = new Action(); 
+		Seller user = (Seller) userRepository.getById(action.getSeller().getId());
+
 		action.setFromDate(actionDTO.getFromDate());
 		action.setPercentage(actionDTO.getPercentage());
 		action.setText(actionDTO.getText());
 		action.setToDate(actionDTO.getToDate());
+		action.setSeller(user);
 		
 		action = actionRepository.save(action);
 		return new ResponseEntity<>(new ActionDTO(action), HttpStatus.CREATED);

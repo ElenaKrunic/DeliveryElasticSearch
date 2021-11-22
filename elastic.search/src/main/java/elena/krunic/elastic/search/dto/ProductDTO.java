@@ -26,13 +26,12 @@ public class ProductDTO {
 	private Long sellerID; 
 	private Long buyerID;
 	private int quantity; 
-	 private Date orderedAtDate; 
-	 private boolean isDelivered; 	
-	 private int grade; 	
-	 private String comment; 
-	 private boolean anonymousComment;
-	 private boolean archivedComment; 
-	
+	private Date orderedAtDate; 
+	private boolean isDelivered; 	
+	private int grade; 	
+	private String comment; 
+	private boolean anonymousComment;
+	private boolean archivedComment; 
 	
 	 public ProductDTO(Product product) {
 			this.id = product.getId(); 

@@ -20,14 +20,24 @@ import org.springframework.web.bind.annotation.RestController;
 import elena.krunic.elastic.search.dto.ProductDTO;
 import elena.krunic.elastic.search.dto.StringResponseDTO;
 import elena.krunic.elastic.search.model.Product;
+import elena.krunic.elastic.search.model.Seller;
+import elena.krunic.elastic.search.model.User;
 import elena.krunic.elastic.search.repository.ProductRepository;
+import elena.krunic.elastic.search.repository.UserRepository;
 import elena.krunic.elastic.search.service.ProductService;
+import elena.krunic.elastic.search.service.UserService;
 
 @RestController
 @RequestMapping(value="/api/products")
 @CrossOrigin
 public class ProductController {
 
+	@Autowired 
+	private UserRepository userRepository; 
+	
+	@Autowired 
+	private UserService userService; 
+	
 	@Autowired
 	private ProductRepository productRepository; 
 	
@@ -61,11 +71,13 @@ public class ProductController {
 	public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) {
 		
 		Product product = new Product(); 
+		Seller user = (Seller) userRepository.getById(product.getSeller().getId());
 		
 		product.setDescription(productDTO.getDescription());
 		product.setName(productDTO.getName());
 		product.setPath(productDTO.getPath());
 		product.setPrice(productDTO.getPrice());
+		product.setSeller(user);
 		
 		product = productRepository.save(product); 
 		
@@ -103,8 +115,6 @@ public class ProductController {
 		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	}
 	
-	//buy product -> 
-
 	@PostMapping("/orderProduct")
 	public ResponseEntity<?> order(@RequestBody ProductDTO productDTO, Principal principal) {
 		try {
@@ -114,4 +124,5 @@ public class ProductController {
 			return new ResponseEntity<>(new StringResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 }
