@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,8 @@ import elena.krunic.elastic.search.service.UserService;
 @RequestMapping(value="/api/products")
 @CrossOrigin
 public class ProductController {
+	
+    private static final Logger logger = LogManager.getLogger(ProductController.class);
 
 	@Autowired 
 	private UserRepository userRepository; 
@@ -53,6 +57,8 @@ public class ProductController {
 			productsDTO.add(new ProductDTO(product));
 		}
 		
+        logger.debug("Products dto list : {}", () -> productsDTO);
+
 		return new ResponseEntity<List<ProductDTO>>(productsDTO, HttpStatus.OK);
 	}
 	
