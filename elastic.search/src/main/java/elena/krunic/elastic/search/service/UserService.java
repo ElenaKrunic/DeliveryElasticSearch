@@ -22,12 +22,16 @@ import elena.krunic.elastic.search.model.User;
 import elena.krunic.elastic.search.repository.BuyerRepository;
 import elena.krunic.elastic.search.repository.SellerRepository;
 import elena.krunic.elastic.search.repository.UserRepository;
+import elena.krunic.elastic.search.security.SecurityConfiguration;
 
 @Service
 public class UserService {
 
 	@Autowired
 	private UserRepository userRepository; 
+	
+	@Autowired 
+	private SecurityConfiguration configuration; 
 	
 	@Autowired 
 	private SellerRepository sellerRepository;
@@ -54,15 +58,11 @@ public class UserService {
 		calendar.add(Calendar.DAY_OF_MONTH, 7);
 		date = calendar.getTime(); 
 		seller.setOperatesSince(date);
-		
-		//hesuj !!! 
-		seller.setPassword(sellerDTO.getPassword());
-		
+		seller.setPassword(configuration.passwordEncoder().encode(sellerDTO.getPassword()));
 		seller.setStoreName(sellerDTO.getStoreName());
 		seller.setUsername(sellerDTO.getUsername());
 		
 		seller = userRepository.save(seller);
-		
 		
 		return "Seller successfully registered!"; 
 	}
@@ -79,10 +79,7 @@ public class UserService {
 		buyer.setBlocked(false);
 		buyer.setFirstname(buyerDTO.getFirstname());
 		buyer.setLastname(buyerDTO.getLastname());
-		
-		//hesuj lozinku! 
-		
-		buyer.setPassword(buyerDTO.getPassword());
+		buyer.setPassword(configuration.passwordEncoder().encode(buyerDTO.getPassword()));
 		buyer.setUsername(buyerDTO.getUsername());
 		
 		buyer = userRepository.save(buyer);  
@@ -103,11 +100,8 @@ public class UserService {
 		seller.setEmail(sellerDTO.getEmail());
 		seller.setFirstname(sellerDTO.getFirstname());
 		seller.setLastname(sellerDTO.getLastname());
-		seller.setOperatesSince(sellerDTO.getOperatesSince());
-		
-		//hesuj lozinku! 
-
-		seller.setPassword(sellerDTO.getPassword());
+		seller.setOperatesSince(sellerDTO.getOperatesSince());	
+		seller.setPassword(configuration.passwordEncoder().encode(sellerDTO.getPassword()));
 		seller.setStoreName(sellerDTO.getStoreName());
 		seller.setUsername(sellerDTO.getUsername());
 		
@@ -128,10 +122,7 @@ public class UserService {
 		buyer.setBlocked(buyerDTO.isBlocked());
 		buyer.setFirstname(buyerDTO.getFirstname());
 		buyer.setLastname(buyerDTO.getLastname());
-		
-		// hesuj lozinku! 
-		
-		buyer.setPassword(buyerDTO.getPassword());
+		buyer.setPassword(configuration.passwordEncoder().encode(buyerDTO.getPassword()));
 		buyer.setUsername(buyerDTO.getUsername());
 		
 		buyer = buyerRepository.save(buyer); 
@@ -181,7 +172,8 @@ public class UserService {
 		if(user == null) {
 			throw new Exception("User does not exist!");
 		}
-		user.setPassword(userDTO.getPassword());
+		
+		user.setPassword(configuration.passwordEncoder().encode(userDTO.getPassword()));
 		user = userRepository.save(user);
 		
 	}
@@ -197,7 +189,7 @@ public class UserService {
 		user.setFirstname(userDTO.getFirstname());
 		user.setLastname(userDTO.getLastname());
 		user.setBlocked(userDTO.isBlocked());
-		user.setPassword(userDTO.getPassword());
+		user.setPassword(configuration.passwordEncoder().encode(userDTO.getPassword()));
 		user.setUsername(userDTO.getUsername());
 		
 		user = userRepository.save(user);
