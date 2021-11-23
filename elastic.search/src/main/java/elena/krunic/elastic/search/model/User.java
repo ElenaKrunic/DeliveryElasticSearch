@@ -43,5 +43,10 @@ public class User implements Serializable {
 	@Column(name="blocked", nullable = false)
 	private boolean blocked; 
 	
+	public User(String username, String password) {
+		this.username = username; 
+		this.password = password; 
+	}
+	
 	
 }

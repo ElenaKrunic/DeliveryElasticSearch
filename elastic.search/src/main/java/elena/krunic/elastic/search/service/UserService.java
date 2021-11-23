@@ -5,7 +5,12 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import elena.krunic.elastic.search.dto.BuyerDTO;
 import elena.krunic.elastic.search.dto.SellerDTO;
@@ -86,7 +91,7 @@ public class UserService {
 
 	public String editSeller(SellerDTO sellerDTO, String name) throws Exception {
 		
-		Seller seller = sellerRepository.findByName(name); 
+		Seller seller = sellerRepository.findByUsername(name); 
 		
 		if(seller == null ) {
 			throw new Exception("User does not exist!");
@@ -112,7 +117,7 @@ public class UserService {
 
 	public String editBuyer(BuyerDTO buyerDTO, String name) throws Exception {
 		
-		Buyer buyer = buyerRepository.findByName(name);
+		Buyer buyer = buyerRepository.findByUsername(name);
 		
 		if(buyer == null) {
 			throw new Exception("Buyer does not exist!"); 
@@ -146,4 +151,25 @@ public class UserService {
 		return "User is banned from system!";
 	}
 
+	@DeleteMapping(value="/deleteUser/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+		User user = userRepository.getById(id); 
+		
+		if(user != null) {
+			userRepository.deleteById(id);
+			return new ResponseEntity<Void>(HttpStatus.OK); 
+		}
+		
+		return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+	}
+	
+	public User loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepository.findByUsername(username); 
+		System.out.println("User"  + user);
+		if(user == null) {
+			throw new UsernameNotFoundException(String.format("User not found with username '%s'.", username));
+		}
+		
+			return new User(user.getUsername(), user.getPassword());
+		}
 }
