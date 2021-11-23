@@ -26,7 +26,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Product {
-//produkt je artikal
 	
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

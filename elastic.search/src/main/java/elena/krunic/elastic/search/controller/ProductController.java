@@ -1,13 +1,23 @@
 package elena.krunic.elastic.search.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +27,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import antlr.StringUtils;
 import elena.krunic.elastic.search.dto.ProductDTO;
 import elena.krunic.elastic.search.dto.StringResponseDTO;
 import elena.krunic.elastic.search.model.Product;
@@ -28,6 +41,13 @@ import elena.krunic.elastic.search.repository.ProductRepository;
 import elena.krunic.elastic.search.repository.UserRepository;
 import elena.krunic.elastic.search.service.ProductService;
 import elena.krunic.elastic.search.service.UserService;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.io.source.ByteArrayOutputStream;
+
 
 @RestController
 @RequestMapping(value="/api/products")
@@ -36,6 +56,11 @@ public class ProductController {
 	
     private static final Logger logger = LogManager.getLogger(ProductController.class);
 
+    @Autowired 
+    ServletContext servletContext; 
+    
+    private TemplateEngine templateEngine; 
+    
 	@Autowired 
 	private UserRepository userRepository; 
 	
@@ -47,6 +72,34 @@ public class ProductController {
 	
 	@Autowired 
 	private ProductService productService; 
+	
+	public ProductController(TemplateEngine templateEngine) {
+		this.templateEngine = templateEngine; 
+	}
+	
+	@RequestMapping(path="/pdf/{id}") 
+	public ResponseEntity<?> getPDF(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		Product product = productRepository.getById(id);
+		
+		WebContext context = new WebContext(request,response, servletContext); 
+		context.setVariable("productEntry", product);
+		String productHTML = templateEngine.process("product", context);
+		
+		 ByteArrayOutputStream target = new ByteArrayOutputStream();
+	     ConverterProperties converterProperties = new ConverterProperties();
+	     converterProperties.setBaseUri("http://localhost:8080");
+	     
+	     HtmlConverter.convertToPdf(productHTML, target, converterProperties);
+	     
+	     byte[] bytes = target.toByteArray();
+	     
+	     return ResponseEntity.ok()
+	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=product.pdf")
+	                .contentType(MediaType.APPLICATION_PDF)
+	                .body(bytes);
+
+	}
 	
 	@GetMapping(value="/all")
 	public ResponseEntity<List<ProductDTO>> getProducts(){
@@ -130,5 +183,7 @@ public class ProductController {
 			return new ResponseEntity<>(new StringResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
 	
 }
