@@ -1,5 +1,6 @@
 package elena.krunic.elastic.search.service;
 
+import java.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
@@ -172,4 +173,34 @@ public class UserService {
 		
 			return new User(user.getUsername(), user.getPassword());
 		}
+
+	public void changePassword(UserDTO userDTO, String name) throws Exception {
+
+		User user = userRepository.findByUsername(name); 
+		
+		if(user == null) {
+			throw new Exception("User does not exist!");
+		}
+		user.setPassword(userDTO.getPassword());
+		user = userRepository.save(user);
+		
+	}
+
+	public String changeProfileData(UserDTO userDTO, String name) throws Exception {
+		
+		User user = userRepository.findByUsername(name); 
+		
+		if(user == null) {
+			throw new Exception("User does not exist!"); 
+		}
+		
+		user.setFirstname(userDTO.getFirstname());
+		user.setLastname(userDTO.getLastname());
+		user.setBlocked(userDTO.isBlocked());
+		user.setPassword(userDTO.getPassword());
+		user.setUsername(userDTO.getUsername());
+		
+		user = userRepository.save(user);
+		return "Data changed successfully!";
+	}
 }
