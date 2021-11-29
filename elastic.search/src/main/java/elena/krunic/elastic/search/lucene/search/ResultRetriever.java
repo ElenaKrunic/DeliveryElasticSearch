@@ -8,6 +8,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import elena.krunic.elastic.search.dto.ErrandDTO;
 import elena.krunic.elastic.search.dto.ProductDTO;
 import elena.krunic.elastic.search.lucene.model.RequiredHighlight;
 import io.searchbox.client.JestClient;
@@ -100,5 +101,64 @@ public class ResultRetriever {
 	    		e.printStackTrace();
 	    	}
 	    	return productResult;  
+	    }
+	    
+	    public static List<ErrandDTO> getErrandResults(org.elasticsearch.index.query.QueryBuilder query, List<RequiredHighlight> highlihts) {
+	    	
+	    	if(query == null) {
+	    		throw new IllegalArgumentException();
+	    	}
+	    	
+	    	List<ErrandDTO> errandResults = new ArrayList<>();
+	    	
+	    	SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+	        searchSourceBuilder.query(query);
+	        searchSourceBuilder.size(maxHits);
+	        
+	        HighlightBuilder highlightBuilder = new HighlightBuilder(); 
+	        highlightBuilder.field("comment");
+	        highlightBuilder.field("grade"); 
+	        
+	        highlightBuilder.preTags("<spam style='color:red'>").postTags("</spam>");
+	        highlightBuilder.fragmentSize(200);
+	        searchSourceBuilder.highlighter(highlightBuilder);
+	        Search search = new Search.Builder(searchSourceBuilder.toString())
+	                .addIndex("errands")
+	                .addType("errand")
+	                .build();
+	        SearchResult result;
+	        
+	        try {
+	        	result = jestClient.execute(search); 
+	        	if (result.isSucceeded()) {
+	        		log.warn("Pretraga uspjesna");
+	        	} else {
+	        		log.warn("Pretraga bezuspjesna");
+	        	}
+	        	
+	        	List<SearchResult.Hit<ErrandDTO, Void>> hits = result.getHits(ErrandDTO.class);
+	        	ErrandDTO resultData = new ErrandDTO();
+	        	
+	        	for (SearchResult.Hit<ErrandDTO, Void> sd: hits) {
+	        		String highlight = "";
+					for (String hf: sd.highlight.keySet()) {
+	        			for(RequiredHighlight rh : highlihts) {
+	        				if(hf.equals(rh.getField())) {
+	        					highlight += sd.highlight.get(hf).toString();
+	        				}
+	        			}
+	        		}
+					
+					resultData.setComment(sd.source.getComment());
+					resultData.setGrade(sd.source.getGrade());
+					
+					errandResults.add(resultData);
+	        	}
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	        
+	    	
+	    	return errandResults; 
 	    }
 }
