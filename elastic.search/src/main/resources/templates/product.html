@@ -21,14 +21,12 @@
         <tr>
             <th class="text-left pl-4">Name</th>
             <th>Description</th>
-            <th>Price</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="item : ${productEntry.items}">
             <td class="pl-4 text-left" th:text="${productEntry.name}"></td>
             <td class="pl-4 text-left" th:text="${productEntry.description}"></td>
-            <td class="pl-4 text-left" th:text="${productEntry.price}" ></td>
         </tr>
         </tbody>
     </table>
