@@ -1,10 +1,15 @@
 package elena.krunic.elastic.search.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import elena.krunic.elastic.search.dto.ErrandDTO;
 import elena.krunic.elastic.search.dto.ProductDTO;
 import elena.krunic.elastic.search.model.Errand;
 import elena.krunic.elastic.search.model.Product;
@@ -45,6 +50,22 @@ public class ErrandService {
 		
 		errand = errandRepository.save(errand);
 		return "You leaved comment successfully";
+	}
+
+	public List<ErrandDTO> getByBuyer(Long id) {
+		
+		if(errandRepository.getById(id) == null)
+			throw new EntityNotFoundException(); 
+		
+		List<Errand> errands = errandRepository.findAllByBuyerId(id); 
+		List<ErrandDTO> dtos = new ArrayList<>();
+		
+		for(Errand errand : errands) {
+			dtos.add(new ErrandDTO(errand));
+		}
+		
+		return dtos; 
+		
 	}
 
 }

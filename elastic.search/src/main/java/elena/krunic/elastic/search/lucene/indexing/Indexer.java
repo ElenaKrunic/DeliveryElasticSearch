@@ -2,6 +2,7 @@ package elena.krunic.elastic.search.lucene.indexing;
 
 import org.springframework.stereotype.Service;
 
+import elena.krunic.elastic.search.dto.ErrandDTO;
 import elena.krunic.elastic.search.dto.ProductDTO;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -26,7 +27,7 @@ public class Indexer {
 	
 	private static Indexer indexer = new Indexer(); 
 	
-	public static Indexer getInstance() { return indexer; }
+	public Indexer getInstance() { return indexer; }
 	
 	private Indexer() {
 		JestClientFactory factory = new JestClientFactory();
@@ -39,7 +40,6 @@ public class Indexer {
 		jestClient = factory.getObject();
 	}
 	
-	//index products 
 	public int indexProducts(List<ProductDTO> products) throws Exception {
 		JestResult result = null; 
 		int retVal = 0; 
@@ -58,7 +58,6 @@ public class Indexer {
 		}
 	}
 	
-	//add product 
 	public boolean addProduct(ProductDTO productDTO) {
 		Index index = new Index.Builder(productDTO).index("products").type("product").id(productDTO.getId().toString()).build();
 		System.out.println("Index je " + index);
@@ -76,14 +75,12 @@ public class Indexer {
 		
 	}
 	
-	//exist product 
 	public boolean existProduct(int id) throws Exception {
 		DocumentResult result = jestClient.execute(new Get.Builder("products", id + "").build());
 		log.warn("Proizvod postoji/ne postoji" + result);
 		return result.isSucceeded();	
 	}
 	
-	//delete product
 	public boolean deleteProduct(int id) {
 		JestResult result; 
 		try {
@@ -102,13 +99,64 @@ public class Indexer {
 		return false; 
 	}
 	
-	//index errands 
+	public int indexErrands(List<ErrandDTO> errands) throws Exception {
+		JestResult result = null; 
+		int retVal = 0; 
+		
+		for(ErrandDTO errandDTO : errands) {
+			Index index = new Index.Builder(errandDTO).index("errands").type("errand").id(errandDTO.getId().toString()).build();
+			result = jestClient.execute(index);
+		}
+		
+		if(result.isSucceeded()) {
+			log.warn("Zavrseno indeksiranje porudzbina"); 
+			return retVal += errands.size();
+		} else {
+			log.warn("Neuspjesno indeksiranje porudzbina");
+			return -1; 
+		}
+	}
 	
-	//add errand 
+	public boolean addErrand(ErrandDTO errandDTO) {
+		Index index = new Index.Builder(errandDTO).index("errands").type("errand").id(errandDTO.getId().toString()).build();
+		System.out.println("Index je " + index);
+		JestResult result;
+		
+		try {
+			result = jestClient.execute(index);
+			System.out.println("Dodajem indeks " + result);
+			return result.isSucceeded();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false; 
+		
+	}
 	
-	//exist errand 
+	public boolean existErrand(int id) throws Exception {
+		DocumentResult result = jestClient.execute(new Get.Builder("errands", id + "").build());
+		log.warn("Poruzbina postoji/ne postoji" + result);
+		return result.isSucceeded();	
+	}
 	
-	//delete errand 
+	public boolean deleteErrand(int id) {
+		JestResult result; 
+		try {
+			result = jestClient.execute(new Delete.Builder(id + "")
+					.index("errands")
+					.type("errand")
+					.build());
+			log.warn("Brisem porudzbinu sa id-jem" + id);
+			if(result.isSucceeded()) 
+				return true; 
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false; 
+	}
 	
 	
 	
