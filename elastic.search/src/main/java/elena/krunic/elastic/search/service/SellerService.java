@@ -7,15 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import elena.krunic.elastic.search.dto.ProductDTO;
+import elena.krunic.elastic.search.lucene.dto.ProductLuceneDTO;
 import elena.krunic.elastic.search.model.Product;
 import elena.krunic.elastic.search.repository.ProductRepository;
 import elena.krunic.elastic.search.repository.SellerRepository;
 
 @Service
 public class SellerService {
-
-	@Autowired
-	private SellerRepository sellerRepository; 
 	
 	@Autowired 
 	private ProductRepository productRepository; 
@@ -29,5 +27,17 @@ public class SellerService {
 		}
 		return productsDTO;
 	}
-
+	
+	public List<ProductLuceneDTO> findProductsLuceneForSeller(long id) {
+		List<Product> products = productRepository.findProductsBySellerId(id);
+		List<ProductLuceneDTO> luceneDTOs = new ArrayList<>(); 
+		
+		for(Product product : products) {
+			luceneDTOs.add(new ProductLuceneDTO(product));
+		}
+		
+		return luceneDTOs;
+	}
+	
+	
 }

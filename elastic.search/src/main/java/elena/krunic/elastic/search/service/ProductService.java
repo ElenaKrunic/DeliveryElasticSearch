@@ -91,7 +91,7 @@ public class ProductService {
 		
 		return dtos;
 	}
-
+	
 	public ProductDTO getOne(String name) throws Exception {
 		Product product = productRepository.findByName(name); 
 		

@@ -23,10 +23,13 @@ import lombok.Setter;
 @Entity
 @Table(name="product")
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class Product {
+	
+	public Product() {
+		
+	}
 
 	//zbog testa nullable == true
 	@Id

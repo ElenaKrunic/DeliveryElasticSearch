@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import elena.krunic.elastic.search.dto.ProductDTO;
+import elena.krunic.elastic.search.model.Product;
 import elena.krunic.elastic.search.service.SellerService;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
