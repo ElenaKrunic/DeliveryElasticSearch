@@ -21,7 +21,7 @@ public class ProductDTO {
 	private Long id;
 	private String name; 
 	private String description;
-	private double price;
+	private int price;
 	private String path; 
 	private Long sellerID; 
 	private Long buyerID;
@@ -31,14 +31,16 @@ public class ProductDTO {
 	private int grade; 	
 	private String comment; 
 	private boolean anonymousComment;
-	private boolean archivedComment; 
+	private boolean archivedComment;
+	private ItemDTO itemDTO;
 	
-	 public ProductDTO(Product product) {
+	public ProductDTO(Product product) {
 			this.id = product.getId(); 
 			this.name = product.getName(); 
 			this.description = product.getDescription(); 
 			this.price = product.getPrice(); 
 			this.path = product.getPath();
+			//this.itemQuantity = product.get
+			//this.itemQuantity = product.getItems().add(Item item);
 		}
-
 }

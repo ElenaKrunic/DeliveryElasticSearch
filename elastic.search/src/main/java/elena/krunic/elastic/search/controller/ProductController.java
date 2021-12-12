@@ -183,6 +183,90 @@ public class ProductController {
 		}
 	}
 	
+	//=======================================================================================
+	
+	@PostMapping(consumes="application/json", value="/saveProductTest")
+	public ResponseEntity<ProductDTO> saveProductTest(@RequestBody ProductDTO productDTO) {
+		
+		Product product = new Product(); 
+		
+		product.setDescription(productDTO.getDescription());
+		product.setName(productDTO.getName());
+		product.setPrice(productDTO.getPrice());
+		product.setPath(productDTO.getPath());
+		
+		product = productRepository.save(product); 
+		
+		return new ResponseEntity<>(new ProductDTO(product), HttpStatus.CREATED); 
+	}
+	
+	@GetMapping(value="/allTest")
+	public ResponseEntity<List<ProductDTO>> getProductsTest(){
+		List<Product> products = productRepository.findAll(); 
+		List<ProductDTO> productsDTO = new ArrayList<>();
+		
+		for(Product product: products) {
+			productsDTO.add(new ProductDTO(product));
+		}
+		
+        //logger.debug("Products dto list : {}", () -> productsDTO);
+		return new ResponseEntity<List<ProductDTO>>(productsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="getOneTest/{id}")
+	public ResponseEntity<ProductDTO> getProductTest(@PathVariable("id") Long id) {
+		Product product = productRepository.getById(id); 
+		
+		if(product == null) {
+			return new ResponseEntity<ProductDTO>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<ProductDTO>(new ProductDTO(product), HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/updateProductTest")
+	//ovde kad radim update traziti principal.getName od seller-a 
+	public ResponseEntity<ProductDTO> updateProductTest(@RequestBody ProductDTO productDTO, Principal principal) {
+		
+		Product product = productRepository.findByName("Retina MacBook Pro 13 inch MF841"); 
+		
+		if(product == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+		}
+		
+		product.setDescription(productDTO.getDescription());
+		product.setName(productDTO.getName());
+		product.setPath(productDTO.getPath());
+		product.setPrice(productDTO.getPrice());
+		
+		product = productRepository.save(product); 
+		
+		return new ResponseEntity<>(new ProductDTO(product), HttpStatus.OK); 
+	}
+	
+	 @GetMapping("/oneTestPrincipal")
+	 public ResponseEntity<?> getOneTestPrincipal(Principal principal) {
+		
+	        try {
+	            ProductDTO product = productService.getOne(principal.getName());
+	            return new ResponseEntity<>(product, HttpStatus.OK);
+	        } catch (Exception e) {
+	            return new ResponseEntity<>(new StringResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+	        }
+	    }
+	 
+	@DeleteMapping(value="/deleteProductTest/{id}")
+    public ResponseEntity<Void> deleteProductTest(@PathVariable("id") Long id) {
+			Product product = productRepository.getById(id); 
+			
+			if(product != null) {
+				productRepository.deleteById(id);
+				//System.out.println(" >>>>>>>>>>>>>>>>>>>>>> USPJESNO OBRISAN PROIZVOD >>>>>>>>>>>>>>>>>");
+				return new ResponseEntity<Void>(HttpStatus.OK); 
+			}
+			
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		}
 	
 	
 }

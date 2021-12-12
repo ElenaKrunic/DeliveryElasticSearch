@@ -3,6 +3,7 @@ package elena.krunic.elastic.search.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,26 +27,27 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Product {
-	
+
+	//zbog testa nullable == true
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = true)
 	private String name; 
     
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
    	private String description;
     
-    @Column(name = "price", nullable = false)
-   	private double price;
+    @Column(name = "price", nullable = true)
+   	private int price;
     
-    @Column(name = "path", nullable = false)
+    @Column(name = "path", nullable = true)
    	private String path; 
     
-    @OneToMany(mappedBy="product")
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    //obrisati svaku vezu koju proizvod ima
+    @OneToMany(mappedBy="product", cascade = CascadeType.REMOVE)
     private List<Item> items;
 
     @ManyToOne

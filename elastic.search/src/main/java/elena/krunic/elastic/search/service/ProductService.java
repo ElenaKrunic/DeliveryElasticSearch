@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import elena.krunic.elastic.search.dto.ProductDTO;
@@ -42,10 +44,6 @@ public class ProductService {
 	
 	public String orderProduct(ProductDTO productDTO, String address) throws Exception {
 		
-		//treba da dodam kolicinu i adresu kupca 
-		//treba da smanjim njegovu dostupnost kod erranda 
-		//treba mi buyer preko adrese 
-		
 		Buyer buyer = buyerRepository.findByAddress(address);
 		
 		Seller seller = (Seller) userRepository.findById(productDTO.getSellerID()).orElse(null);
@@ -76,7 +74,7 @@ public class ProductService {
 		errand = errandRepository.save(errand); 
 		item = itemRepository.save(item);
 			
-		return "Product successfully ordered!";
+		return "Product/s successfully ordered!";
 	}
 
 	public List<ProductDTO> getBySeller(Long id) throws Exception {
@@ -92,6 +90,23 @@ public class ProductService {
 		}
 		
 		return dtos;
+	}
+
+	public ProductDTO getOne(String name) throws Exception {
+		Product product = productRepository.findByName(name); 
+		
+		if(product == null) {
+			throw new Exception("Product does not exist!");
+		}
+		
+		ProductDTO tmp = new ProductDTO();
+		tmp.setId(product.getId());
+		tmp.setName(product.getName());
+		tmp.setDescription(product.getDescription());
+		tmp.setPrice(product.getPrice());
+		
+		return tmp;
+		
 	}
 
 	
