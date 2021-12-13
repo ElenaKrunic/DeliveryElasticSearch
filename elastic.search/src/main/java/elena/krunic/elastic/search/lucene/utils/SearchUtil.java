@@ -3,6 +3,7 @@ package elena.krunic.elastic.search.lucene.utils;
 import java.util.List;
 
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -98,6 +99,32 @@ public class SearchUtil {
 
 	private static QueryBuilder getGTERangeQueryBuilder(String field, double price) {
 		return QueryBuilders.rangeQuery(field).gte(price);
+	}
+	
+	public static SearchRequest buildBooleanSearchRequest(String productIndex, final SearchRequestDTO dto, final double price) {
+		try {
+			final QueryBuilder searchQuery = getQueryBuilder(dto);
+			final QueryBuilder priceQuery = getGTERangeQueryBuilder("price", price);
+			
+			final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery().mustNot(searchQuery).must(priceQuery);
+			
+			SearchSourceBuilder builder = new SearchSourceBuilder().postFilter(boolQuery);
+			
+			 if (dto.getSortBy() != null) {
+	                builder = builder.sort(
+	                        dto.getSortBy(),
+	                        dto.getOrder() != null ? dto.getOrder() : SortOrder.ASC
+	                );
+	            }
+			 
+			  final SearchRequest request = new SearchRequest(productIndex);
+	          request.source(builder);
+
+	            return request;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
 	

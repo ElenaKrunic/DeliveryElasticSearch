@@ -50,7 +50,6 @@ public class ProductLuceneController {
 		return productsLucene;
 	}
 	
-	//pretraga 
 	@PostMapping("/searchMatchQuery")
 	public List<ProductLuceneDTO> searchMatchQuery(@RequestBody final SearchRequestDTO dto) {
 		return productLuceneService.searchMatchQuery(dto);
@@ -60,6 +59,9 @@ public class ProductLuceneController {
 	public List<ProductLuceneDTO> getAllProductsWithGreaterThenPrice(@PathVariable("price") double price) {
 		return productLuceneService.getAllGTEProducts(price);
 	}
-	 
 	
+	@PostMapping("/searchBoolPriceGTE/{price}")
+	public List<ProductLuceneDTO> productsPriceBooleanQuery (@RequestBody SearchRequestDTO dto,@PathVariable("price") double price) {
+		return  productLuceneService.productsPriceBooleanGTE(dto, price); 
+	}
 }

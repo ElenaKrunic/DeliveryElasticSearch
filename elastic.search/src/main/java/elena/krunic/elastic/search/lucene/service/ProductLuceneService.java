@@ -147,6 +147,12 @@ public class ProductLuceneService {
 		final SearchRequest request = SearchUtil.buildRangeSearchRequest(Indices.PRODUCT_INDEX, "price"	, price);
 		return searchInternal(request);
 	}
+	
+
+	public List<ProductLuceneDTO> productsPriceBooleanGTE(SearchRequestDTO dto, double price) {
+		final SearchRequest request = SearchUtil.buildBooleanSearchRequest(Indices.PRODUCT_INDEX,dto, price);
+		return searchInternal(request);
+	}
 
 		
 	
