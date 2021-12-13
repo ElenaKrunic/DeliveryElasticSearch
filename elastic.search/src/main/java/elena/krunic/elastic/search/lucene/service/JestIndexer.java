@@ -42,6 +42,7 @@ public class JestIndexer {
 			for(ProductLuceneDTO product : products) {
 				Index index = new Index.Builder(product).index("products").type("product").id(product.getId().toString()).build();
 				result = jestClient.execute(index);
+				System.out.println(">>>>>>>>> result u metodi indexFromDb: >>>>>>>>>" + result);
 			}
 			
 		} catch(Exception e) {

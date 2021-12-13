@@ -12,10 +12,11 @@ import lombok.Setter;
 @Setter
 public class ProductLuceneDTO {
 
+	private String _class;
 	private Long id;
 	private String name; 
 	private String description;
-	private int price;
+	private double price;
 	
 	public ProductLuceneDTO(Product product) {
 		this.id = product.getId(); 

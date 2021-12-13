@@ -19,9 +19,7 @@ public class Config extends AbstractElasticsearchConfiguration {
 
 	@Value("${elasticsearch.url}")
 	public String elasticsearchUrl;
-	
-	private JestClient jestClient; 
-	
+		
 	@Bean
 	@Override
 	public RestHighLevelClient elasticsearchClient() {

@@ -15,6 +15,8 @@ insert into product (id, description, name, path, price, seller_id) values (2,  
 insert into product (id, description, name, path, price, seller_id) values (3, '3.0GHz Dual-core Haswell Intel Core i5 Turbo Boost up to 3.2 GHz, 3MB L3 cache 8GB (two 4GB SO-DIMMs) of 1600MHz DDR3 SDRAM', 'Macbook Pro 15.4 inch Retina MC975LL/A Model 2012 ', 'http://media.bizwebmedia.net//sites/72783/data/images/2015/7/2913337mf841_13_inch_2_9ghz_with_retina_display_early_2015.png', 1000, 4)
 insert into product (id, description, name, path, price, seller_id) values (4, '2.9 Ghz Dual-Core Intel Core i5 Broadwell Tubro boost up to 3.3 GHz with L3 3MB cache', 'Retina MacBook Pro 13 inch MF841', 'https://www.dropbox.com/s/rjj1vtdx79xptu0/img6.jpeg?raw=1', 1000, 4)
 insert into product (id, description, name, path, price, seller_id) values (5, '2.9 Ghz Dual-Core Intel Core i5 Broadwell Tubro boost up to 3.3 GHz with L3 3MB cache', 'Retina', 'https://www.dropbox.com/s/rjj1vtdx79xptu0/img6.jpeg?raw=1', 1000, 4)
+insert into product (id, description, name, path, price, seller_id) values (6, '2.9 Ghz Dual-Core Intel Core i5 Broadwell Tubro boost up to 3.3 GHz with L3 3MB cache', 'Retina 1', 'https://www.dropbox.com/s/rjj1vtdx79xptu0/img6.jpeg?raw=1', 1200.22, 4)
+insert into product (id, description, name, path, price, seller_id) values (7, '2.9 Ghz Dual-Core Intel Core i5 Broadwell Tubro boost up to 3.3 GHz with L3 3MB cache', 'Retina 2', 'https://www.dropbox.com/s/rjj1vtdx79xptu0/img6.jpeg?raw=1', 1322.2, 4)
 
 insert into item (id, quantity, errand_id, product_id) values (1, 1, 1, 1)
 insert into item (id, quantity, errand_id, product_id) values (2, 2, 2, 2)

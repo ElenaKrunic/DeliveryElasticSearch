@@ -13,11 +13,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SearchRequestDTO extends PageRequestDTO {
+public class SearchRequestDTO {
 	
 	private List<String> fields; 
 	private String searchTerm;
-	private String sortBy; 
-	private SortOrder order; 
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import elena.krunic.elastic.search.dto.ProductDTO;
 import elena.krunic.elastic.search.lucene.dto.ProductLuceneDTO;
+import elena.krunic.elastic.search.lucene.dto.SearchRequestDTO;
 import elena.krunic.elastic.search.lucene.service.JestIndexer;
 import elena.krunic.elastic.search.lucene.service.ProductLuceneService;
 
@@ -25,28 +26,35 @@ public class ProductLuceneController {
 	private ProductLuceneService productLuceneService; 	
 	
 	@Autowired
-	private JestIndexer jestIndexer;
-	
-	@Autowired
 	private SellerService sellerService; 
 	
 	public ProductLuceneController(ProductLuceneService productLuceneService) {
 		this.productLuceneService = productLuceneService; 
 	}
 	
-	@GetMapping("/oneIndexed/{id}")
-	public Boolean getId(@PathVariable final Long id) throws Exception {
-		return jestIndexer.existProduct(id);
-	}
-	
 	@PostMapping("/indexProduct")
 	public void indexProduct(@RequestBody final ProductLuceneDTO product) {
 		productLuceneService.index(product);
 	}
-	
-	@PostMapping("indexAll/{id}")
-	public void indexProductsFromDatabase(@PathVariable("id") Long id) {
+
+	@PostMapping("/indexAllBulk/{id}")
+	public void indexBulk(@PathVariable("id") Long id) {
 		List<ProductLuceneDTO> productsLucene = sellerService.findProductsLuceneForSeller(id);
-		jestIndexer.indexProductsFromDatabase(productsLucene);
+		productLuceneService.createProductIndexBulk(productsLucene);
 	}
+	
+	
+	@GetMapping("/getAllIndexed/{id}")
+	public List<ProductLuceneDTO> getIndexedFromDatabase(@PathVariable("id") Long id) {
+		List<ProductLuceneDTO> productsLucene = sellerService.findProductsLuceneForSeller(id);
+		return productsLucene;
+	}
+	
+	//pretraga 
+	@PostMapping("/searchMatchQuery")
+	public List<ProductLuceneDTO> searchMatchQuery(@RequestBody final SearchRequestDTO dto) {
+		return productLuceneService.searchMatchQuery(dto);
+	}
+	
+	
 }
