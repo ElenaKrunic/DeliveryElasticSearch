@@ -22,10 +22,17 @@ public class SearchUtil {
 			//final int size = dto.getSize(); 
 			//final int from = page <= 0 ? 0 : page * size;
 			
-			final SearchSourceBuilder builder = new SearchSourceBuilder()
+			 SearchSourceBuilder builder = new SearchSourceBuilder()
 					//.from(from)
 					//.size(size)
 					.postFilter(getQueryBuilder(dto));
+			
+			  if (dto.getSortBy() != null) {
+	                builder = builder.sort(
+	                        dto.getSortBy(),
+	                        dto.getOrder() != null ? dto.getOrder() : SortOrder.ASC
+	                );
+	            }
 			
 			//System.out.println("Query builder je " + getQueryBuilder(dto).getName());
 			
@@ -53,7 +60,7 @@ public class SearchUtil {
 		}
 		
 		final List<String> fields = dto.getFields(); 
-		//System.out.println(">>> fields u kveri bilderu >>> " + dto.getFields());
+	
 		if(CollectionUtils.isEmpty(fields)) {
 			return null; 
 		}
@@ -68,13 +75,9 @@ public class SearchUtil {
 			return queryBuilder; 
 		}
 		
-		//System.out.println(">>> fields u returnu >>>" + fields);
-		
 		return fields.stream()
 				.findFirst()
 				.map(field -> QueryBuilders.matchQuery(field, dto.getSearchTerm()).operator(Operator.AND)).orElse(null);
-		
-		
 	}
 
 }
