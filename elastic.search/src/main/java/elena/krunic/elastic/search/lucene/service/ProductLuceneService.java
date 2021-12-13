@@ -143,6 +143,11 @@ public class ProductLuceneService {
 		}
 	}
 
+	public List<ProductLuceneDTO> getAllGTEProducts(double price) {
+		final SearchRequest request = SearchUtil.buildRangeSearchRequest(Indices.PRODUCT_INDEX, "price"	, price);
+		return searchInternal(request);
+	}
+
 		
 	
 }

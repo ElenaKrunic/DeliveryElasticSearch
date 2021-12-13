@@ -80,5 +80,24 @@ public class SearchUtil {
 				.map(field -> QueryBuilders.matchQuery(field, dto.getSearchTerm()).operator(Operator.AND)).orElse(null);
 	}
 
+	public static SearchRequest buildRangeSearchRequest(String productIndex, String field, double price) {
+		
+		try {
+			final SearchSourceBuilder builder = new SearchSourceBuilder().postFilter(getGTERangeQueryBuilder(field, price));
+			
+			final SearchRequest request = new SearchRequest(productIndex);
+            request.source(builder);
+
+            return request;
+            
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null; 
+	}
+
+	private static QueryBuilder getGTERangeQueryBuilder(String field, double price) {
+		return QueryBuilders.rangeQuery(field).gte(price);
+	}
 }
 	

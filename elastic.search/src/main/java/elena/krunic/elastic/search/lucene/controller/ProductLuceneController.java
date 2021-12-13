@@ -56,7 +56,10 @@ public class ProductLuceneController {
 		return productLuceneService.searchMatchQuery(dto);
 	}
 	
-	
-	
+	@GetMapping("/searchGreatherThen/{price}")
+	public List<ProductLuceneDTO> getAllProductsWithGreaterThenPrice(@PathVariable("price") double price) {
+		return productLuceneService.getAllGTEProducts(price);
+	}
+	 
 	
 }
