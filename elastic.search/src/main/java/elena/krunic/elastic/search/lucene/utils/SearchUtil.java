@@ -19,13 +19,13 @@ public class SearchUtil {
 	public static SearchRequest buildSearchRequest(String productIndex, SearchRequestDTO dto) {
 		
 		try {
-			//final int page = dto.getPage(); 
-			//final int size = dto.getSize(); 
-			//final int from = page <= 0 ? 0 : page * size;
+			final int page = dto.getPage(); 
+			final int size = dto.getSize(); 
+			final int from = page <= 0 ? 0 : page * size;
 			
 			 SearchSourceBuilder builder = new SearchSourceBuilder()
-					//.from(from)
-					//.size(size)
+					.from(from)
+					.size(size)
 					.postFilter(getQueryBuilder(dto));
 			
 			  if (dto.getSortBy() != null) {
@@ -34,12 +34,10 @@ public class SearchUtil {
 	                        dto.getOrder() != null ? dto.getOrder() : SortOrder.ASC
 	                );
 	            }
-			
-			//System.out.println("Query builder je " + getQueryBuilder(dto).getName());
-			
-			//if(dto.getSortBy() != null) {
-				//builder = builder.sort(dto.getSortBy(), dto.getOrder() != null ? dto.getOrder() : SortOrder.ASC);
-			//}
+						
+			if(dto.getSortBy() != null) {
+				builder = builder.sort(dto.getSortBy(), dto.getOrder() != null ? dto.getOrder() : SortOrder.ASC);
+			}
 			
 			SearchRequest request = new SearchRequest(productIndex); 
 			request.source(builder); 
