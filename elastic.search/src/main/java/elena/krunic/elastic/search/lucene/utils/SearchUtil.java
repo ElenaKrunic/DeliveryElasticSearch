@@ -124,5 +124,7 @@ public class SearchUtil {
 			return null;
 		}
 	}
+
+	//public static QueryBuilder getQueryBuilder()
 }
 	

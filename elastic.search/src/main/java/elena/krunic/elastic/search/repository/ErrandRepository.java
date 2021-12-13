@@ -10,4 +10,6 @@ public interface ErrandRepository extends JpaRepository<Errand, Long> {
 
 	List<Errand> findAllByBuyerId(Long id);
 
+	List<Errand> findErrandsByBuyerId(Long id);
+
 }

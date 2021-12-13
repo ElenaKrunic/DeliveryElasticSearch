@@ -32,7 +32,6 @@ import elena.krunic.elastic.search.dto.ProductDTO;
 import elena.krunic.elastic.search.lucene.dto.ProductLuceneDTO;
 import elena.krunic.elastic.search.lucene.dto.SearchRequestDTO;
 import elena.krunic.elastic.search.lucene.helper.Indices;
-import elena.krunic.elastic.search.lucene.model.ProductLucene;
 import elena.krunic.elastic.search.lucene.repository.ProductLuceneRepository;
 import elena.krunic.elastic.search.lucene.utils.SearchUtil;
 import elena.krunic.elastic.search.model.Product;
@@ -51,9 +50,8 @@ public class ProductLuceneService {
 	
 	private final static ObjectMapper MAPPER = new ObjectMapper();
 	private RestHighLevelClient client;
-	
 	public static final String PRODUCT_INDEX = "products";
-
+	
 	@Autowired
 	private ElasticsearchOperations elasticsearchOperations;
 

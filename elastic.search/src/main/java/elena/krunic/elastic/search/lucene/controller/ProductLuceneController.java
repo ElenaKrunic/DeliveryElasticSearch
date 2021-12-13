@@ -37,25 +37,25 @@ public class ProductLuceneController {
 		productLuceneService.index(product);
 	}
 
-	@PostMapping("/indexAllBulk/{id}")
-	public void indexBulk(@PathVariable("id") Long id) {
+	@PostMapping("/indexProducts/{id}")
+	public void indexProducts(@PathVariable("id") Long id) {
 		List<ProductLuceneDTO> productsLucene = sellerService.findProductsLuceneForSeller(id);
 		productLuceneService.createProductIndexBulk(productsLucene);
 	}
 	
 	
-	@GetMapping("/getAllIndexed/{id}")
+	@GetMapping("/getAllIndexedProducts/{id}")
 	public List<ProductLuceneDTO> getIndexedFromDatabase(@PathVariable("id") Long id) {
 		List<ProductLuceneDTO> productsLucene = sellerService.findProductsLuceneForSeller(id);
 		return productsLucene;
 	}
 	
-	@PostMapping("/searchMatchQuery")
-	public List<ProductLuceneDTO> searchMatchQuery(@RequestBody final SearchRequestDTO dto) {
+	@PostMapping("/searchProductMatchQuery")
+	public List<ProductLuceneDTO> searchProducthMatchQuery(@RequestBody final SearchRequestDTO dto) {
 		return productLuceneService.searchMatchQuery(dto);
 	}
 	
-	@GetMapping("/searchGreatherThen/{price}")
+	@GetMapping("/searchProductGreatherThenOrEquals/{price}")
 	public List<ProductLuceneDTO> getAllProductsWithGreaterThenPrice(@PathVariable("price") double price) {
 		return productLuceneService.getAllGTEProducts(price);
 	}

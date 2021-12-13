@@ -1,0 +1,13 @@
+{
+	"properties" : {
+		"id" : {
+			"type" : "keyword"
+		},
+		"description" : {
+			"type" : "text"
+		},
+		"grade" : {
+			"type" : "int"
+		}
+	}
+}
