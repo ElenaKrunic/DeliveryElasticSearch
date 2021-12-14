@@ -43,7 +43,6 @@ public class ProductLuceneController {
 		productLuceneService.createProductIndexBulk(productsLucene);
 	}
 	
-	
 	@GetMapping("/getAllIndexedProducts/{id}")
 	public List<ProductLuceneDTO> getIndexedFromDatabase(@PathVariable("id") Long id) {
 		List<ProductLuceneDTO> productsLucene = sellerService.findProductsLuceneForSeller(id);
@@ -55,13 +54,29 @@ public class ProductLuceneController {
 		return productLuceneService.searchMatchQuery(dto);
 	}
 	
+	@PostMapping("/searchBoolPriceGTE/{price}")
+	public List<ProductLuceneDTO> productsPriceBooleanQuery (@RequestBody SearchRequestDTO dto,@PathVariable("price") double price) {
+		return  productLuceneService.productsPriceBooleanGTE(dto, price); 
+	}
+	
 	@GetMapping("/searchProductGreatherThenOrEquals/{price}")
 	public List<ProductLuceneDTO> getAllProductsWithGreaterThenPrice(@PathVariable("price") double price) {
 		return productLuceneService.getAllGTEProducts(price);
 	}
 	
-	@PostMapping("/searchBoolPriceGTE/{price}")
-	public List<ProductLuceneDTO> productsPriceBooleanQuery (@RequestBody SearchRequestDTO dto,@PathVariable("price") double price) {
-		return  productLuceneService.productsPriceBooleanGTE(dto, price); 
+	@GetMapping("/searchProductGreatherThen/{price}")
+	public List<ProductLuceneDTO> getAllProductsWithGreaterPrice(@PathVariable("price") double price) {
+		return productLuceneService.getAllGreaterProducts(price);
 	}
+	
+	@GetMapping("/searchProductsLessThenOrEquals/{price}")
+	public List<ProductLuceneDTO> getAllProductsWithLessThenOrEqualsPrice(@PathVariable("price") double price) {
+		return productLuceneService.getAllLTEProducts(price); 
+	}
+	
+	@GetMapping("/searchProductsLessThen/{price}")
+	public List<ProductLuceneDTO> getAllProductsWithLessThenPrice(@PathVariable("price") double price) {
+		return productLuceneService.getAllLessThenProducts(price);
+	}
+	
 }

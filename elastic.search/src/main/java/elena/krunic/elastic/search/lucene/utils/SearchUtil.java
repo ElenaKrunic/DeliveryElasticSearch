@@ -79,7 +79,7 @@ public class SearchUtil {
 				.map(field -> QueryBuilders.matchQuery(field, dto.getSearchTerm()).operator(Operator.AND)).orElse(null);
 	}
 
-	public static SearchRequest buildRangeSearchRequest(String productIndex, String field, double price) {
+	public static SearchRequest buildRangeGTESearchRequest(String productIndex, String field, double price) {
 		
 		try {
 			final SearchSourceBuilder builder = new SearchSourceBuilder().postFilter(getGTERangeQueryBuilder(field, price));
@@ -93,10 +93,6 @@ public class SearchUtil {
 			e.printStackTrace();
 		}
 		return null; 
-	}
-
-	private static QueryBuilder getGTERangeQueryBuilder(String field, double price) {
-		return QueryBuilders.rangeQuery(field).gte(price);
 	}
 	
 	public static SearchRequest buildBooleanSearchRequest(String productIndex, final SearchRequestDTO dto, final double price) {
@@ -125,6 +121,62 @@ public class SearchUtil {
 		}
 	}
 
-	//public static QueryBuilder getQueryBuilder()
+	public static SearchRequest buildRangeGreaterThenSearchRequest(String productIndex, String field, double price) {
+		try {
+			final SearchSourceBuilder builder = new SearchSourceBuilder().postFilter(getGreaterThenRangeQueryBuilder(field, price));
+			final SearchRequest request = new SearchRequest(productIndex); 
+			request.source(builder); 
+			
+			return request; 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null; 
+	}
+	
+	public static SearchRequest buildRangeLTESearchRequest(String productIndex, String field, double price) {
+		try {
+			final SearchSourceBuilder builder = new SearchSourceBuilder().postFilter(getLTERangeQueryBuilder(field, price)); 
+			final SearchRequest request = new SearchRequest(productIndex); 
+			request.source(builder); 
+			
+			return request; 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static SearchRequest buildRangeLessThenSearchRequest(String productIndex, String field, double price) {
+		try {
+			final SearchSourceBuilder builder = new SearchSourceBuilder().postFilter(getLessThenRangeQueryBuilder(field, price)); 
+			final SearchRequest request = new SearchRequest(productIndex); 
+			request.source(builder); 
+			
+			return request; 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static QueryBuilder getGTERangeQueryBuilder(String field, double price) {
+		return QueryBuilders.rangeQuery(field).gte(price);
+	}
+
+	private static QueryBuilder getGreaterThenRangeQueryBuilder(String productIndex, double price) {
+		return QueryBuilders.rangeQuery(productIndex).gt(price);
+	}
+	
+	private static QueryBuilder getLTERangeQueryBuilder(String productIndex, double price) {
+		return QueryBuilders.rangeQuery(productIndex).lte(price); 
+	}
+	
+	private static QueryBuilder getLessThenRangeQueryBuilder(String productIndex, double price) {
+		return QueryBuilders.rangeQuery(productIndex).lt(price);
+	}
+
 }
 	

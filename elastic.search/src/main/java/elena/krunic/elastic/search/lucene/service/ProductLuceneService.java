@@ -140,15 +140,32 @@ public class ProductLuceneService {
 			return null;
 		}
 	}
-
-	public List<ProductLuceneDTO> getAllGTEProducts(double price) {
-		final SearchRequest request = SearchUtil.buildRangeSearchRequest(Indices.PRODUCT_INDEX, "price"	, price);
-		return searchInternal(request);
-	}
 	
 
 	public List<ProductLuceneDTO> productsPriceBooleanGTE(SearchRequestDTO dto, double price) {
 		final SearchRequest request = SearchUtil.buildBooleanSearchRequest(Indices.PRODUCT_INDEX,dto, price);
+		return searchInternal(request);
+	}
+
+
+	public List<ProductLuceneDTO> getAllGTEProducts(double price) {
+		final SearchRequest request = SearchUtil.buildRangeGTESearchRequest(Indices.PRODUCT_INDEX, "price"	, price);
+		return searchInternal(request);
+	}
+	
+
+	public List<ProductLuceneDTO> getAllGreaterProducts(double price) {
+		final SearchRequest request = SearchUtil.buildRangeGreaterThenSearchRequest(Indices.PRODUCT_INDEX, "price", price);
+		return searchInternal(request);
+	}
+	
+	public List<ProductLuceneDTO> getAllLTEProducts(double price) {
+		final SearchRequest request = SearchUtil.buildRangeLTESearchRequest(PRODUCT_INDEX, "price", price);
+		return searchInternal(request); 
+	}
+	
+	public List<ProductLuceneDTO> getAllLessThenProducts(double price) {
+		final SearchRequest request = SearchUtil.buildRangeLessThenSearchRequest(PRODUCT_INDEX, "price", price);
 		return searchInternal(request);
 	}
 
